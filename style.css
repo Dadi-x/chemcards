@@ -272,6 +272,8 @@ select:focus {
     justify-content: center;
     align-items: center;
     border: 1px solid var(--border-color);
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .card.no-transition {

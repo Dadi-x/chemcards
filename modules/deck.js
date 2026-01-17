@@ -35,7 +35,7 @@ export class Deck {
         this.shuffle(filtered);
 
         // Limit batch size
-        if (settings.batchSize && settings.batchSize !== 'all') {
+        if (settings.batchSize && settings.batchSize !== 'all' && settings.batchSize !== 'infinity') {
             const count = parseInt(settings.batchSize);
             filtered = filtered.slice(0, count);
         }

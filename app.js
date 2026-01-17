@@ -259,22 +259,12 @@ App.prototype.startGame = function (replaySameDeck = false) {
         this.currentSettings = this.ui.getSettings();
         this.storage.saveSettings(this.currentSettings);
         this.todoCards = this.deck.createDeck(this.currentSettings); // This returns a copy
+        this.originalDeck = [...this.todoCards]; // Store for infinity mode
         this.totalCardsInitially = this.todoCards.length;
     } else {
-        this.deck.shuffle(this.todoCards); // Reshuffle remaining? Or restart all?
-        // "Znovu stejné" usually means restart the whole batch.
-        // So we need a reference to the original deck?
-        // Let's assume "Znovu stejné" means "Restart with same cards"
-        // But we modified the array.
-        // We should regenerate or keep a copy.
-        // Simplification: Regenerate using same settings for MVP if "New Game"
-        // For "Restart Same Batch", we might need to store the IDs.
-
-        // MVP: Just regenerate using settings. User context "Restart same selection" -> same filters.
         if (replaySameDeck) {
-            // If we finished, todoCards is empty.
-            // We need to re-generate using saved settings.
             this.todoCards = this.deck.createDeck(this.currentSettings);
+            this.originalDeck = [...this.todoCards];
             this.totalCardsInitially = this.todoCards.length;
         }
     }
@@ -331,14 +321,26 @@ App.prototype.startRetryErrorsGame = function () {
 
 App.prototype.loadNextCard = function () {
     if (this.todoCards.length === 0) {
-        this.finishGame();
-        return;
+        if (this.currentSettings.batchSize === 'infinity') {
+            // Infinity Mode: Reshuffle original selection and continue
+            this.todoCards = [...this.originalDeck];
+            this.deck.shuffle(this.todoCards);
+            this.completedCount = 0; // Reset progress bar loop
+            // Continue to load next card
+        } else {
+            this.finishGame();
+            return;
+        }
     }
 
     const card = this.todoCards[0]; // Always take top
     this.ui.updateCard(card, this.currentSettings.direction);
     // Update progress: Completed / Total Initial
-    this.ui.updateProgress(this.completedCount, this.totalCardsInitially);
+    this.ui.updateProgress(
+        this.completedCount,
+        this.totalCardsInitially,
+        this.currentSettings.batchSize === 'infinity'
+    );
 };
 
 App.prototype.handleKnowledge = function (known) {

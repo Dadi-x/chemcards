@@ -138,8 +138,12 @@ export class UI {
         }
     }
 
-    updateProgress(current, total) {
-        this.elements.progressText.textContent = `${current}/${total}`;
+    updateProgress(current, total, isInfinity = false) {
+        if (isInfinity) {
+            this.elements.progressText.textContent = `∞`;
+        } else {
+            this.elements.progressText.textContent = `${current}/${total}`;
+        }
         // Update bar width CSS variable
         const percentage = total > 0 ? (current / total) * 100 : 0;
         this.elements.progressBar.style.setProperty('--progress', `${percentage}%`);
