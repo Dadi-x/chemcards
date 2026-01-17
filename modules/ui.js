@@ -2,6 +2,7 @@ export class UI {
     constructor() {
         this.app = document.getElementById('app');
         this.screens = {
+            landing: document.getElementById('landing-screen'),
             setup: document.getElementById('setup-screen'),
             game: document.getElementById('game-screen'),
             score: document.getElementById('score-screen')

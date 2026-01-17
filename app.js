@@ -25,9 +25,6 @@ class App {
     }
 
     async init() {
-        // Load Data
-        await this.deck.loadData();
-
         // Load Stored Theme
         const savedTheme = this.storage.getTheme();
         this.ui.setTheme(savedTheme);
@@ -39,6 +36,9 @@ class App {
         }
 
         this.attachEventListeners();
+
+        // Show landing screen
+        this.ui.showScreen('landing');
     }
 
     attachEventListeners() {
@@ -119,7 +119,18 @@ class App {
         });
 
         document.getElementById('new-game-btn').addEventListener('click', () => {
-            this.ui.showScreen('setup');
+            this.ui.showScreen('landing');
+        });
+
+        // Dataset Selection
+        document.querySelectorAll('.dataset-card:not(.disabled)').forEach(card => {
+            card.addEventListener('click', () => {
+                const dataset = card.dataset.dataset;
+                console.log('Loading dataset:', dataset);
+                this.deck.loadData(dataset).then(() => {
+                    this.ui.showScreen('setup');
+                });
+            });
         });
     }
 
@@ -127,18 +138,33 @@ class App {
         if (!replaySameDeck) {
             this.currentSettings = this.ui.getSettings();
             this.storage.saveSettings(this.currentSettings);
-            this.currentCards = this.deck.createDeck(this.currentSettings);
+            this.todoCards = this.deck.createDeck(this.currentSettings);
+            this.totalCardsInitially = this.todoCards.length;
         } else {
-            // Just reshuffle if checking again
-            this.deck.shuffle(this.currentCards);
+            // Restart Same Batch
+            if (replaySameDeck) {
+                this.todoCards = this.deck.createDeck(this.currentSettings);
+                this.totalCardsInitially = this.todoCards.length;
+            }
         }
 
-        if (this.currentCards.length === 0) {
+        if (this.todoCards.length === 0) {
             alert('Žádné karty neodpovídají výběru. Zkuste změnit filtr.');
             return;
         }
 
-        this.currentIndex = 0;
+        this.completedCount = 0;
+
+        // Initialize stats
+        this.stats = {
+            totalCards: this.totalCardsInitially,
+            correctFirstTry: 0,
+            wrongAttempts: 0,
+            startTime: Date.now(),
+            cardErrors: new Map()
+        };
+        this.seenCards = new Set();
+
         this.ui.showScreen('game');
         this.loadNextCard();
     }
@@ -399,10 +425,8 @@ App.prototype.renderErrorCards = function () {
 };
 
 App.prototype.handleExit = function () {
-    const confirmed = confirm('Opravdu chceš ukončit lekci?\n\nTvůj postup nebude uložen.');
-    if (confirmed) {
-        this.ui.showScreen('setup');
-    }
+    // Immediately finish game and show stats
+    this.finishGame();
 };
 
 new App();
