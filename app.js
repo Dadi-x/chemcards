@@ -326,7 +326,13 @@ App.prototype.loadNextCard = function () {
             this.todoCards = [...this.originalDeck];
             this.deck.shuffle(this.todoCards);
             this.completedCount = 0; // Reset progress bar loop
-            // Continue to load next card
+
+            // Stats logic for Infinity Mode:
+            // We want to track how many cards were presented in total across all rounds
+            this.stats.totalCards += this.originalDeck.length;
+            // We clear seenCards so that the first encounter in the NEW round 
+            // counts as a "first try" for that round's statistics.
+            this.seenCards.clear();
         } else {
             this.finishGame();
             return;
