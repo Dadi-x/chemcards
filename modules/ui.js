@@ -239,6 +239,7 @@ export class UI {
     }
 
     updateModal(item) {
+        document.getElementById('modal-symbol').textContent = item.symbol;
         document.getElementById('modal-main-answer').textContent = item.name_cz;
         document.getElementById('modal-atomic').textContent = item.atomic_number;
         document.getElementById('modal-group').textContent = item.group;

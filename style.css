@@ -732,7 +732,17 @@ select:focus {
 }
 
 .static-card {
-    height: 360px;
+    width: 340px;
+    max-width: 90vw;
+    height: 480px;
     /* Force height for static display */
     cursor: default;
+}
+
+.modal-card-symbol {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    line-height: 1;
 }
