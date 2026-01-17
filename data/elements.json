@@ -1,0 +1,200 @@
+[
+    {
+        "id": 1,
+        "symbol": "H",
+        "name_cz": "Vodík",
+        "name_en": "Hydrogen",
+        "name_lat": "Hydrogenium",
+        "atomic_number": 1,
+        "group": 1,
+        "period": 1,
+        "category": "nonmetal"
+    },
+    {
+        "id": 2,
+        "symbol": "He",
+        "name_cz": "Helium",
+        "name_en": "Helium",
+        "name_lat": "Helium",
+        "atomic_number": 2,
+        "group": 18,
+        "period": 1,
+        "category": "noble-gas"
+    },
+    {
+        "id": 3,
+        "symbol": "Li",
+        "name_cz": "Lithium",
+        "name_en": "Lithium",
+        "name_lat": "Lithium",
+        "atomic_number": 3,
+        "group": 1,
+        "period": 2,
+        "category": "alkali-metal"
+    },
+    {
+        "id": 4,
+        "symbol": "Be",
+        "name_cz": "Beryllium",
+        "name_en": "Beryllium",
+        "name_lat": "Beryllium",
+        "atomic_number": 4,
+        "group": 2,
+        "period": 2,
+        "category": "alkaline-earth-metal"
+    },
+    {
+        "id": 5,
+        "symbol": "B",
+        "name_cz": "Bor",
+        "name_en": "Boron",
+        "name_lat": "Borum",
+        "atomic_number": 5,
+        "group": 13,
+        "period": 2,
+        "category": "metalloid"
+    },
+    {
+        "id": 6,
+        "symbol": "C",
+        "name_cz": "Uhlík",
+        "name_en": "Carbon",
+        "name_lat": "Carboneum",
+        "atomic_number": 6,
+        "group": 14,
+        "period": 2,
+        "category": "nonmetal"
+    },
+    {
+        "id": 7,
+        "symbol": "N",
+        "name_cz": "Dusík",
+        "name_en": "Nitrogen",
+        "name_lat": "Nitrogenium",
+        "atomic_number": 7,
+        "group": 15,
+        "period": 2,
+        "category": "nonmetal"
+    },
+    {
+        "id": 8,
+        "symbol": "O",
+        "name_cz": "Kyslík",
+        "name_en": "Oxygen",
+        "name_lat": "Oxygenium",
+        "atomic_number": 8,
+        "group": 16,
+        "period": 2,
+        "category": "nonmetal"
+    },
+    {
+        "id": 9,
+        "symbol": "F",
+        "name_cz": "Fluor",
+        "name_en": "Fluorine",
+        "name_lat": "Fluorum",
+        "atomic_number": 9,
+        "group": 17,
+        "period": 2,
+        "category": "halogen"
+    },
+    {
+        "id": 10,
+        "symbol": "Ne",
+        "name_cz": "Neon",
+        "name_en": "Neon",
+        "name_lat": "Neon",
+        "atomic_number": 10,
+        "group": 18,
+        "period": 2,
+        "category": "noble-gas"
+    },
+    {
+        "id": 11,
+        "symbol": "Na",
+        "name_cz": "Sodík",
+        "name_en": "Sodium",
+        "name_lat": "Natrium",
+        "atomic_number": 11,
+        "group": 1,
+        "period": 3,
+        "category": "alkali-metal"
+    },
+    {
+        "id": 12,
+        "symbol": "Mg",
+        "name_cz": "Hořčík",
+        "name_en": "Magnesium",
+        "name_lat": "Magnesium",
+        "atomic_number": 12,
+        "group": 2,
+        "period": 3,
+        "category": "alkaline-earth-metal"
+    },
+    {
+        "id": 13,
+        "symbol": "Al",
+        "name_cz": "Hliník",
+        "name_en": "Aluminium",
+        "name_lat": "Aluminium",
+        "atomic_number": 13,
+        "group": 13,
+        "period": 3,
+        "category": "post-transition-metal"
+    },
+    {
+        "id": 14,
+        "symbol": "Si",
+        "name_cz": "Křemík",
+        "name_en": "Silicon",
+        "name_lat": "Silicium",
+        "atomic_number": 14,
+        "group": 14,
+        "period": 3,
+        "category": "metalloid"
+    },
+    {
+        "id": 15,
+        "symbol": "P",
+        "name_cz": "Fosfor",
+        "name_en": "Phosphorus",
+        "name_lat": "Phosphorus",
+        "atomic_number": 15,
+        "group": 15,
+        "period": 3,
+        "category": "nonmetal"
+    },
+    {
+        "id": 16,
+        "symbol": "S",
+        "name_cz": "Síra",
+        "name_en": "Sulfur",
+        "name_lat": "Sulphur",
+        "atomic_number": 16,
+        "group": 16,
+        "period": 3,
+        "category": "nonmetal"
+    },
+    {
+        "id": 17,
+        "symbol": "Cl",
+        "name_cz": "Chlor",
+        "name_en": "Chlorine",
+        "name_lat": "Chlorum",
+        "atomic_number": 17,
+        "group": 17,
+        "period": 3,
+        "category": "halogen"
+    },
+    {
+        "id": 18,
+        "symbol": "Ar",
+        "name_cz": "Argon",
+        "name_en": "Argon",
+        "name_lat": "Argon",
+        "atomic_number": 18,
+        "group": 18,
+        "period": 3,
+        "category": "noble-gas"
+    }
+]
