@@ -13,7 +13,7 @@ export class Storage {
     }
 
     getTheme() {
-        return localStorage.getItem('chemflash_theme') || 'light';
+        return localStorage.getItem('chemflash_theme') || 'dark';
     }
 
     saveTheme(theme) {

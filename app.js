@@ -114,8 +114,8 @@ class App {
             this.ui.showScreen('landing');
         });
 
-        // Modal Close
-        document.getElementById('close-modal').addEventListener('click', () => {
+        // Modal Close (Anywhere)
+        document.getElementById('card-modal').addEventListener('click', () => {
             this.ui.toggleModal(false);
         });
 
