@@ -17,7 +17,8 @@ class App {
             totalCards: 0,
             correctFirstTry: 0,
             wrongAttempts: 0,
-            startTime: null
+            startTime: null,
+            cardErrors: new Map() // Track errors per card: card.id -> { element, errorCount }
         };
 
         this.init();
@@ -237,7 +238,8 @@ App.prototype.startGame = function (replaySameDeck = false) {
         totalCards: this.totalCardsInitially,
         correctFirstTry: 0,
         wrongAttempts: 0,
-        startTime: Date.now()
+        startTime: Date.now(),
+        cardErrors: new Map()
     };
     this.seenCards = new Set(); // Track which cards we've seen
 
@@ -267,11 +269,20 @@ App.prototype.handleKnowledge = function (known) {
             this.stats.correctFirstTry++;
         } else {
             this.stats.wrongAttempts++;
+            // Track error for this card
+            this.stats.cardErrors.set(card.id, { element: card, errorCount: 1 });
         }
     } else {
         // Card was recycled, count as wrong attempt
         if (!known) {
             this.stats.wrongAttempts++;
+            // Increment error count for this card
+            const existing = this.stats.cardErrors.get(card.id);
+            if (existing) {
+                existing.errorCount++;
+            } else {
+                this.stats.cardErrors.set(card.id, { element: card, errorCount: 1 });
+            }
         }
     }
 
@@ -303,7 +314,47 @@ App.prototype.finishGame = function () {
     document.getElementById('stat-accuracy').textContent = `${accuracy}%`;
     document.getElementById('stat-time').textContent = timeString;
 
+    // Generate error cards list
+    this.renderErrorCards();
+
     this.ui.showScreen('score');
+};
+
+App.prototype.renderErrorCards = function () {
+    const errorCardsContainer = document.getElementById('error-cards-list');
+    const errorCardsSection = document.getElementById('error-cards-section');
+
+    // Clear previous content
+    errorCardsContainer.innerHTML = '';
+
+    if (this.stats.cardErrors.size === 0) {
+        // Hide section if no errors
+        errorCardsSection.style.display = 'none';
+        return;
+    }
+
+    // Show section
+    errorCardsSection.style.display = 'block';
+
+    // Sort cards by error count (descending)
+    const sortedErrors = Array.from(this.stats.cardErrors.values())
+        .sort((a, b) => b.errorCount - a.errorCount);
+
+    // Render each card
+    sortedErrors.forEach(({ element, errorCount }) => {
+        const cardItem = document.createElement('div');
+        cardItem.className = 'error-card-item';
+
+        cardItem.innerHTML = `
+            <div class="error-card-info">
+                <div class="error-card-symbol">${element.symbol}</div>
+                <div class="error-card-name">${element.name_cz}</div>
+            </div>
+            <div class="error-card-count">${errorCount}× chyba</div>
+        `;
+
+        errorCardsContainer.appendChild(cardItem);
+    });
 };
 
 App.prototype.handleExit = function () {
