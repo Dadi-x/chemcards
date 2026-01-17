@@ -532,10 +532,12 @@ select:focus {
 @media (min-width: 600px) {
     .score-actions {
         flex-direction: row;
+        flex-wrap: wrap;
     }
 
     .score-actions button {
         flex: 1;
+        min-width: 150px;
     }
 
     .stats-dashboard {

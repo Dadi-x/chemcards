@@ -48,13 +48,21 @@ class App {
             this.storage.saveTheme(newTheme);
         });
 
-        // Batch Size Buttons
-        document.querySelectorAll('.batch-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.batch-btn').forEach(b => b.classList.remove('selected'));
-                e.target.classList.add('selected');
+        // Helper for toggle groups
+        const setupToggleGroup = (selector) => {
+            const container = document.querySelector(selector);
+            if (!container) return;
+
+            container.querySelectorAll('.batch-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    container.querySelectorAll('.batch-btn').forEach(b => b.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                });
             });
-        });
+        };
+
+        setupToggleGroup('#batch-size-group');
+        setupToggleGroup('#direction-group');
 
         // Start Game
         document.getElementById('start-btn').addEventListener('click', () => {
@@ -102,6 +110,10 @@ class App {
         });
 
         // Score Screen Buttons
+        document.getElementById('retry-errors-btn').addEventListener('click', () => {
+            this.startRetryErrorsGame();
+        });
+
         document.getElementById('restart-same-btn').addEventListener('click', () => {
             this.startGame(true); // Restart with same deck
         });
@@ -242,6 +254,35 @@ App.prototype.startGame = function (replaySameDeck = false) {
         cardErrors: new Map()
     };
     this.seenCards = new Set(); // Track which cards we've seen
+
+    this.ui.showScreen('game');
+    this.loadNextCard();
+};
+
+App.prototype.startRetryErrorsGame = function () {
+    if (!this.stats || this.stats.cardErrors.size === 0) {
+        alert('Žádné chyby k procvičení! Skvělá práce.');
+        return;
+    }
+
+    // specific elements from errors
+    const errorElements = Array.from(this.stats.cardErrors.values()).map(item => item.element);
+
+    // Shuffle them
+    this.todoCards = [...errorElements];
+    this.deck.shuffle(this.todoCards);
+    this.totalCardsInitially = this.todoCards.length;
+
+    // Reset stats for new game
+    this.completedCount = 0;
+    this.stats = {
+        totalCards: this.totalCardsInitially,
+        correctFirstTry: 0,
+        wrongAttempts: 0,
+        startTime: Date.now(),
+        cardErrors: new Map()
+    };
+    this.seenCards = new Set();
 
     this.ui.showScreen('game');
     this.loadNextCard();

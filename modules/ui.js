@@ -22,8 +22,8 @@ export class UI {
             themeToggle: document.getElementById('theme-toggle'),
             periodFilters: document.getElementById('period-filters'),
             groupFilters: document.getElementById('group-filters'),
-            directionSelect: document.getElementById('direction-select'),
-            batchButtons: document.querySelectorAll('.batch-btn')
+            directionButtons: document.querySelectorAll('#direction-group .batch-btn'),
+            batchButtons: document.querySelectorAll('#batch-size-group .batch-btn')
         };
 
         this.initFilters();
@@ -166,8 +166,16 @@ export class UI {
             }
         });
 
+        // Find selected direction
+        let direction = 'symbol_to_name';
+        this.elements.directionButtons.forEach(btn => {
+            if (btn.classList.contains('selected')) {
+                direction = btn.dataset.value;
+            }
+        });
+
         return {
-            direction: this.elements.directionSelect.value,
+            direction: direction,
             periods: this.getSelectedFilters(this.elements.periodFilters),
             groups: this.getSelectedFilters(this.elements.groupFilters),
             batchSize: batchSize
@@ -185,7 +193,16 @@ export class UI {
 
     setSettings(settings) {
         if (!settings) return;
-        if (settings.direction) this.elements.directionSelect.value = settings.direction;
+
+        if (settings.direction) {
+            this.elements.directionButtons.forEach(btn => {
+                if (btn.dataset.value === settings.direction) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
 
         if (settings.batchSize) {
             this.elements.batchButtons.forEach(btn => {
