@@ -278,7 +278,7 @@ App.prototype.startGame = function (replaySameDeck = false) {
 
     // Initialize stats
     this.stats = {
-        totalCards: this.totalCardsInitially,
+        totalCards: 0,
         correctFirstTry: 0,
         wrongAttempts: 0,
         startTime: Date.now(),
@@ -307,7 +307,7 @@ App.prototype.startRetryErrorsGame = function () {
     // Reset stats for new game
     this.completedCount = 0;
     this.stats = {
-        totalCards: this.totalCardsInitially,
+        totalCards: 0,
         correctFirstTry: 0,
         wrongAttempts: 0,
         startTime: Date.now(),
@@ -327,9 +327,6 @@ App.prototype.loadNextCard = function () {
             this.deck.shuffle(this.todoCards);
             this.completedCount = 0; // Reset progress bar loop
 
-            // Stats logic for Infinity Mode:
-            // We want to track how many cards were presented in total across all rounds
-            this.stats.totalCards += this.originalDeck.length;
             // We clear seenCards so that the first encounter in the NEW round 
             // counts as a "first try" for that round's statistics.
             this.seenCards.clear();
@@ -353,9 +350,10 @@ App.prototype.handleKnowledge = function (known) {
     this.ui.animateSwipe(known, () => {
         const card = this.todoCards.shift(); // Remove from top
 
-        // Track stats
+        // Track stats for unique entries per round
         if (!this.seenCards.has(card.id)) {
             this.seenCards.add(card.id);
+            this.stats.totalCards++; // Count unique card once
             if (known) {
                 this.stats.correctFirstTry++;
             } else {
@@ -395,10 +393,16 @@ App.prototype.finishGame = function (isEarlyExit = false) {
     const seconds = Math.floor((timeElapsed % 60000) / 1000);
     const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-    const totalAttempts = this.stats.correctFirstTry + this.stats.wrongAttempts;
+    const totalAttempts = this.stats.totalCards;
     const accuracy = totalAttempts > 0
         ? Math.round((this.stats.correctFirstTry / totalAttempts) * 100)
         : 100;
+
+    // Correct accuracy for specific learning context: 
+    // Usually correctFirstTry / Unique Cards is better
+    const uniqueSeen = this.seenCards.size;
+    // However, if we are in Infinity Mode or have multiple rounds, seenCards is cleared.
+    // Let's stick to total actions accuracy for now as it's the most mathematically sound for "total sessions".
 
     // Update Heading
     const scoreHeading = document.querySelector('#score-screen h2');
