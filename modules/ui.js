@@ -237,4 +237,21 @@ export class UI {
             });
         }
     }
+
+    updateModal(item) {
+        document.getElementById('modal-main-answer').textContent = item.name_cz;
+        document.getElementById('modal-atomic').textContent = item.atomic_number;
+        document.getElementById('modal-group').textContent = item.group;
+        document.getElementById('modal-en').textContent = item.name_en;
+        document.getElementById('modal-lat').textContent = item.name_lat;
+    }
+
+    toggleModal(show) {
+        const modal = document.getElementById('card-modal');
+        if (show) {
+            modal.classList.remove('hidden');
+        } else {
+            modal.classList.add('hidden');
+        }
+    }
 }

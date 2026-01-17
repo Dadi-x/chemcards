@@ -670,3 +670,69 @@ select:focus {
     font-size: 1rem;
     margin-top: auto;
 }
+
+#app-title {
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+#app-title:hover {
+    color: var(--primary-color);
+    transform: scale(1.02);
+}
+
+.error-card-item {
+    cursor: pointer;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    position: relative;
+    padding: 2rem;
+    max-width: 90%;
+    max-height: 90vh;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--accent-red);
+    color: white;
+    border: 2px solid var(--bg-color);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: var(--shadow-md);
+}
+
+.static-card {
+    height: 360px;
+    /* Force height for static display */
+    cursor: default;
+}

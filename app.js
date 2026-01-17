@@ -109,6 +109,16 @@ class App {
             this.handleExit();
         });
 
+        // App Title -> Landing
+        document.getElementById('app-title').addEventListener('click', () => {
+            this.ui.showScreen('landing');
+        });
+
+        // Modal Close
+        document.getElementById('close-modal').addEventListener('click', () => {
+            this.ui.toggleModal(false);
+        });
+
         // Score Screen Buttons
         document.getElementById('retry-errors-btn').addEventListener('click', () => {
             this.startRetryErrorsGame();
@@ -119,7 +129,7 @@ class App {
         });
 
         document.getElementById('new-game-btn').addEventListener('click', () => {
-            this.ui.showScreen('landing');
+            this.ui.showScreen('setup');
         });
 
         // Dataset Selection
@@ -363,7 +373,7 @@ App.prototype.handleKnowledge = function (known) {
     this.loadNextCard();
 };
 
-App.prototype.finishGame = function () {
+App.prototype.finishGame = function (isEarlyExit = false) {
     // Calculate stats
     const timeElapsed = Date.now() - this.stats.startTime;
     const minutes = Math.floor(timeElapsed / 60000);
@@ -374,6 +384,14 @@ App.prototype.finishGame = function () {
     const accuracy = totalAttempts > 0
         ? Math.round((this.stats.correctFirstTry / totalAttempts) * 100)
         : 100;
+
+    // Update Heading
+    const scoreHeading = document.querySelector('#score-screen h2');
+    if (isEarlyExit) {
+        scoreHeading.textContent = 'Ukončeno 🛑';
+    } else {
+        scoreHeading.textContent = 'Dokončeno! 🎉';
+    }
 
     // Update UI
     document.getElementById('stat-total').textContent = this.stats.totalCards;
@@ -420,13 +438,18 @@ App.prototype.renderErrorCards = function () {
             <div class="error-card-count">${errorCount}× chyba</div>
         `;
 
+        cardItem.addEventListener('click', () => {
+            this.ui.updateModal(element);
+            this.ui.toggleModal(true);
+        });
+
         errorCardsContainer.appendChild(cardItem);
     });
 };
 
 App.prototype.handleExit = function () {
     // Immediately finish game and show stats
-    this.finishGame();
+    this.finishGame(true);
 };
 
 new App();

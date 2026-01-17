@@ -11,7 +11,7 @@
 <body>
     <div id="app">
         <header>
-            <h1>ChemFlash</h1>
+            <h1 id="app-title">ChemFlash</h1>
             <button id="theme-toggle" aria-label="Přepnout tmavý režim">🌗</button>
         </header>
 
@@ -142,6 +142,24 @@
             </section>
         </main>
     </div>
+    <!-- Card Detail Modal -->
+    <div id="card-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-modal" class="close-modal-btn">✕</button>
+            <div class="card flipped static-card">
+                <div class="card-back">
+                    <h3 id="modal-main-answer">Odpověď</h3>
+                    <div class="card-meta">
+                        <p>Z: <span id="modal-atomic"></span></p>
+                        <p>Sk.: <span id="modal-group"></span></p>
+                        <p>EN: <span id="modal-en"></span></p>
+                        <p>LAT: <span id="modal-lat"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="app.js"></script>
 </body>
 
