@@ -267,7 +267,65 @@ export class UI {
 
             setTimeout(() => {
                 this.elements.card.classList.remove('card-enter');
-            }, 400);
-        }, 350);
+            }, 200);
+        }, 250);
+    }
+
+    initSwipeGesture(onSwipe) {
+        let startX = 0;
+        let isDragging = false;
+        let currentDiffX = 0;
+        const threshold = 120; // Slightly higher for intentionality
+        const card = this.elements.card;
+
+        const handleStart = (e) => {
+            if (!card.classList.contains('flipped')) return;
+            isDragging = true;
+            startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            card.classList.add('dragging');
+        };
+
+        const handleMove = (e) => {
+            if (!isDragging) return;
+            const x = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            currentDiffX = x - startX;
+            const rotation = currentDiffX / 20;
+
+            // While flipped at 180deg, X axis is reversed, so we negate currentDiffX to move with the pointer
+            card.style.transform = `rotateY(180deg) translateX(${-currentDiffX}px) rotate(${-rotation}deg)`;
+
+            // Visual feedback
+            if (currentDiffX > 50) card.style.boxShadow = '0 0 30px rgba(72, 187, 120, 0.4)';
+            else if (currentDiffX < -50) card.style.boxShadow = '0 0 30px rgba(245, 101, 101, 0.4)';
+            else card.style.boxShadow = '';
+        };
+
+        const handleEnd = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            card.classList.remove('dragging');
+            card.style.transform = '';
+            card.style.boxShadow = '';
+
+            if (currentDiffX > threshold) {
+                onSwipe(true);
+            } else if (currentDiffX < -threshold) {
+                onSwipe(false);
+            }
+            currentDiffX = 0;
+        };
+
+        card.addEventListener('mousedown', handleStart);
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleEnd);
+
+        card.addEventListener('touchstart', handleStart, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                handleMove(e);
+                if (e.cancelable) e.preventDefault();
+            }
+        }, { passive: false });
+        window.addEventListener('touchend', handleEnd);
     }
 }

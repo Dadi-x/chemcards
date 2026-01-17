@@ -142,6 +142,11 @@ class App {
                 });
             });
         });
+
+        // Swipe Gestures
+        this.ui.initSwipeGesture((known) => {
+            this.handleKnowledge(known);
+        });
     }
 
     startGame(replaySameDeck = false) {

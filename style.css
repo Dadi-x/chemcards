@@ -288,25 +288,30 @@ select:focus {
 
 /* Animations */
 .card-swipe-right {
-    transform: translateX(150%) rotate(20deg) !important;
+    transform: rotateY(180deg) translateX(-150%) rotate(-20deg) !important;
     opacity: 0;
-    transition: transform 0.4s ease-in, opacity 0.4s ease-in !important;
+    transition: transform 0.25s ease-in, opacity 0.25s ease-in !important;
 }
 
 .card-swipe-left {
-    transform: translateX(-150%) rotate(-20deg) !important;
+    transform: rotateY(180deg) translateX(150%) rotate(20deg) !important;
     opacity: 0;
-    transition: transform 0.4s ease-in, opacity 0.4s ease-in !important;
+    transition: transform 0.25s ease-in, opacity 0.25s ease-in !important;
+}
+
+.card.dragging {
+    transition: none !important;
+    cursor: grabbing;
 }
 
 .card-enter {
-    animation: cardEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: cardEnter 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes cardEnter {
     from {
         opacity: 0;
-        transform: scale(0.8) translateY(20px);
+        transform: scale(0.9) translateY(10px);
     }
 
     to {
