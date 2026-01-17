@@ -90,15 +90,8 @@ export class UI {
     }
 
     updateCard(item, direction) {
-        // Reset card state instantly without animation to avoid flashing back side
-        this.elements.card.classList.add('no-transition');
+        // Reset card state
         this.elements.card.classList.remove('flipped');
-
-        // Force reflow
-        this.elements.card.offsetHeight;
-
-        this.elements.card.classList.remove('no-transition');
-
         this.elements.answerControls.classList.add('hidden');
         this.elements.tapHint.classList.remove('hidden');
 
@@ -261,5 +254,20 @@ export class UI {
         } else {
             modal.classList.add('hidden');
         }
+    }
+
+    animateSwipe(isRight, callback) {
+        const className = isRight ? 'card-swipe-right' : 'card-swipe-left';
+        this.elements.card.classList.add(className);
+
+        setTimeout(() => {
+            callback();
+            this.elements.card.classList.remove(className);
+            this.elements.card.classList.add('card-enter');
+
+            setTimeout(() => {
+                this.elements.card.classList.remove('card-enter');
+            }, 400);
+        }, 350);
     }
 }

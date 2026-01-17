@@ -337,40 +337,42 @@ App.prototype.loadNextCard = function () {
 };
 
 App.prototype.handleKnowledge = function (known) {
-    const card = this.todoCards.shift(); // Remove from top
+    this.ui.animateSwipe(known, () => {
+        const card = this.todoCards.shift(); // Remove from top
 
-    // Track stats
-    if (!this.seenCards.has(card.id)) {
-        this.seenCards.add(card.id);
-        if (known) {
-            this.stats.correctFirstTry++;
-        } else {
-            this.stats.wrongAttempts++;
-            // Track error for this card
-            this.stats.cardErrors.set(card.id, { element: card, errorCount: 1 });
-        }
-    } else {
-        // Card was recycled, count as wrong attempt
-        if (!known) {
-            this.stats.wrongAttempts++;
-            // Increment error count for this card
-            const existing = this.stats.cardErrors.get(card.id);
-            if (existing) {
-                existing.errorCount++;
+        // Track stats
+        if (!this.seenCards.has(card.id)) {
+            this.seenCards.add(card.id);
+            if (known) {
+                this.stats.correctFirstTry++;
             } else {
+                this.stats.wrongAttempts++;
+                // Track error for this card
                 this.stats.cardErrors.set(card.id, { element: card, errorCount: 1 });
             }
+        } else {
+            // Card was recycled, count as wrong attempt
+            if (!known) {
+                this.stats.wrongAttempts++;
+                // Increment error count for this card
+                const existing = this.stats.cardErrors.get(card.id);
+                if (existing) {
+                    existing.errorCount++;
+                } else {
+                    this.stats.cardErrors.set(card.id, { element: card, errorCount: 1 });
+                }
+            }
         }
-    }
 
-    if (known) {
-        this.completedCount++;
-    } else {
-        // Recycle: put back at end
-        this.todoCards.push(card);
-    }
+        if (known) {
+            this.completedCount++;
+        } else {
+            // Recycle: put back at end
+            this.todoCards.push(card);
+        }
 
-    this.loadNextCard();
+        this.loadNextCard();
+    });
 };
 
 App.prototype.finishGame = function (isEarlyExit = false) {
