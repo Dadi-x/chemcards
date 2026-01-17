@@ -12,6 +12,14 @@ class App {
         this.currentIndex = 0;
         this.currentSettings = {};
 
+        // Statistics tracking
+        this.stats = {
+            totalCards: 0,
+            correctFirstTry: 0,
+            wrongAttempts: 0,
+            startTime: null
+        };
+
         this.init();
     }
 
@@ -85,6 +93,11 @@ class App {
         document.getElementById('btn-unknown').addEventListener('click', (e) => {
             e.stopPropagation(); // Avoid flipping
             this.handleKnowledge(false);
+        });
+
+        // Exit Button
+        document.getElementById('exit-btn').addEventListener('click', () => {
+            this.handleExit();
         });
 
         // Score Screen Buttons
@@ -218,6 +231,16 @@ App.prototype.startGame = function (replaySameDeck = false) {
     }
 
     this.completedCount = 0;
+
+    // Initialize stats
+    this.stats = {
+        totalCards: this.totalCardsInitially,
+        correctFirstTry: 0,
+        wrongAttempts: 0,
+        startTime: Date.now()
+    };
+    this.seenCards = new Set(); // Track which cards we've seen
+
     this.ui.showScreen('game');
     this.loadNextCard();
 };
@@ -237,11 +260,25 @@ App.prototype.loadNextCard = function () {
 App.prototype.handleKnowledge = function (known) {
     const card = this.todoCards.shift(); // Remove from top
 
+    // Track stats
+    if (!this.seenCards.has(card.id)) {
+        this.seenCards.add(card.id);
+        if (known) {
+            this.stats.correctFirstTry++;
+        } else {
+            this.stats.wrongAttempts++;
+        }
+    } else {
+        // Card was recycled, count as wrong attempt
+        if (!known) {
+            this.stats.wrongAttempts++;
+        }
+    }
+
     if (known) {
         this.completedCount++;
     } else {
-        // Recycle: put back at end, or random position? End is standard.
-        // Optional: slight delay or feedback?
+        // Recycle: put back at end
         this.todoCards.push(card);
     }
 
@@ -249,7 +286,31 @@ App.prototype.handleKnowledge = function (known) {
 };
 
 App.prototype.finishGame = function () {
+    // Calculate stats
+    const timeElapsed = Date.now() - this.stats.startTime;
+    const minutes = Math.floor(timeElapsed / 60000);
+    const seconds = Math.floor((timeElapsed % 60000) / 1000);
+    const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    const totalAttempts = this.stats.correctFirstTry + this.stats.wrongAttempts;
+    const accuracy = totalAttempts > 0
+        ? Math.round((this.stats.correctFirstTry / totalAttempts) * 100)
+        : 100;
+
+    // Update UI
+    document.getElementById('stat-total').textContent = this.stats.totalCards;
+    document.getElementById('stat-correct').textContent = this.stats.correctFirstTry;
+    document.getElementById('stat-accuracy').textContent = `${accuracy}%`;
+    document.getElementById('stat-time').textContent = timeString;
+
     this.ui.showScreen('score');
+};
+
+App.prototype.handleExit = function () {
+    const confirmed = confirm('Opravdu chceš ukončit lekci?\n\nTvůj postup nebude uložen.');
+    if (confirmed) {
+        this.ui.showScreen('setup');
+    }
 };
 
 new App();

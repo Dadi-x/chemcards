@@ -422,21 +422,113 @@ select:focus {
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Exit Button */
+.exit-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-color);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s, transform 0.1s;
+    opacity: 0.6;
+    z-index: 10;
+}
+
+.exit-btn:hover {
+    background-color: var(--border-color);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Progress */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+#progress-bar {
+    flex-grow: 1;
+    height: 10px;
+    background-color: var(--border-color);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+#progress-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--progress, 0%);
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Score Screen */
 #score-screen {
     text-align: center;
     justify-content: center;
+    gap: 2rem;
 }
 
-.score-summary {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
+#score-screen h2 {
+    margin-bottom: 0;
+}
+
+.stats-dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 500;
 }
 
 .score-actions {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
 }
 
 @media (min-width: 600px) {
@@ -446,5 +538,9 @@ select:focus {
 
     .score-actions button {
         flex: 1;
+    }
+
+    .stats-dashboard {
+        grid-template-columns: repeat(4, 1fr);
     }
 }

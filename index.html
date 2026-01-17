@@ -57,6 +57,7 @@
             </section>
 
             <section id="game-screen" class="screen hidden">
+                <button id="exit-btn" class="exit-btn" aria-label="Ukončit lekci">✕</button>
                 <div class="progress-container">
                     <div id="progress-bar"></div>
                     <span id="progress-text">0/0</span>
@@ -88,8 +89,23 @@
 
             <section id="score-screen" class="screen hidden">
                 <h2>Dokončeno! 🎉</h2>
-                <div class="score-summary">
-                    <p>Prošel jsi všechny karty.</p>
+                <div class="stats-dashboard">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-total">0</div>
+                        <div class="stat-label">Celkem karet</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-correct">0</div>
+                        <div class="stat-label">Správně napoprvé</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-accuracy">0%</div>
+                        <div class="stat-label">Úspěšnost</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-time">0:00</div>
+                        <div class="stat-label">Čas</div>
+                    </div>
                 </div>
                 <div class="score-actions">
                     <button id="restart-same-btn" class="secondary-btn">Znovu stejné</button>
