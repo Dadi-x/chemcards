@@ -90,8 +90,15 @@ export class UI {
     }
 
     updateCard(item, direction) {
-        // Reset card state
+        // Reset card state instantly without animation to avoid flashing back side
+        this.elements.card.classList.add('no-transition');
         this.elements.card.classList.remove('flipped');
+
+        // Force reflow
+        this.elements.card.offsetHeight;
+
+        this.elements.card.classList.remove('no-transition');
+
         this.elements.answerControls.classList.add('hidden');
         this.elements.tapHint.classList.remove('hidden');
 
