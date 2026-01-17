@@ -20,11 +20,67 @@ export class UI {
             answerControls: document.getElementById('answer-controls'),
             tapHint: document.getElementById('tap-hint'),
             themeToggle: document.getElementById('theme-toggle'),
-            periodFilter: document.getElementById('period-filter'),
-            groupFilter: document.getElementById('group-filter'),
+            periodFilters: document.getElementById('period-filters'),
+            groupFilters: document.getElementById('group-filters'),
             directionSelect: document.getElementById('direction-select'),
             batchButtons: document.querySelectorAll('.batch-btn')
         };
+
+        this.initFilters();
+    }
+
+    initFilters() {
+        this.createFilterButtons(this.elements.periodFilters, 7);
+        this.createFilterButtons(this.elements.groupFilters, 18);
+    }
+
+    createFilterButtons(container, count) {
+        // All button
+        const allBtn = document.createElement('button');
+        allBtn.className = 'filter-btn selected';
+        allBtn.textContent = 'Vše';
+        allBtn.dataset.value = 'all';
+        container.appendChild(allBtn);
+
+        for (let i = 1; i <= count; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.textContent = i;
+            btn.dataset.value = i;
+            container.appendChild(btn);
+        }
+
+        // Event delegation
+        container.addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                this.handleFilterClick(e.target, container);
+            }
+        });
+    }
+
+    handleFilterClick(clickedBtn, container) {
+        const isAll = clickedBtn.dataset.value === 'all';
+        const allBtn = container.querySelector('[data-value="all"]');
+        const otherBtns = container.querySelectorAll('.filter-btn:not([data-value="all"])');
+
+        if (isAll) {
+            // Select All, deselect others
+            allBtn.classList.add('selected');
+            otherBtns.forEach(btn => btn.classList.remove('selected'));
+        } else {
+            // Toggle specific
+            clickedBtn.classList.toggle('selected');
+
+            // Check state
+            const anySelected = Array.from(otherBtns).some(b => b.classList.contains('selected'));
+
+            if (anySelected) {
+                allBtn.classList.remove('selected');
+            } else {
+                // If nothing selected, revert to All
+                allBtn.classList.add('selected');
+            }
+        }
     }
 
     showScreen(screenName) {
@@ -112,10 +168,19 @@ export class UI {
 
         return {
             direction: this.elements.directionSelect.value,
-            period: this.elements.periodFilter.value,
-            group: this.elements.groupFilter.value,
+            periods: this.getSelectedFilters(this.elements.periodFilters),
+            groups: this.getSelectedFilters(this.elements.groupFilters),
             batchSize: batchSize
         };
+    }
+
+    getSelectedFilters(container) {
+        const allBtn = container.querySelector('[data-value="all"]');
+        if (allBtn.classList.contains('selected')) return []; // Empty array triggers "select all" in logic
+
+        return Array.from(container.querySelectorAll('.filter-btn.selected'))
+            .filter(btn => btn.dataset.value !== 'all')
+            .map(btn => parseInt(btn.dataset.value));
     }
 
     setSettings(settings) {
@@ -132,7 +197,26 @@ export class UI {
             });
         }
 
-        // Filters we don't strictly persist in UI if user wants fresh start, 
-        // but can optionally set them if saved.
+        if (settings.periods) this.restoreFilters(this.elements.periodFilters, settings.periods);
+        if (settings.groups) this.restoreFilters(this.elements.groupFilters, settings.groups);
+    }
+
+    restoreFilters(container, selectedValues) {
+        const allBtn = container.querySelector('[data-value="all"]');
+        const otherBtns = container.querySelectorAll('.filter-btn:not([data-value="all"])');
+
+        if (!selectedValues || selectedValues.length === 0) {
+            allBtn.classList.add('selected');
+            otherBtns.forEach(btn => btn.classList.remove('selected'));
+        } else {
+            allBtn.classList.remove('selected');
+            otherBtns.forEach(btn => {
+                if (selectedValues.includes(parseInt(btn.dataset.value))) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
     }
 }

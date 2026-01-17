@@ -207,13 +207,36 @@ select:focus {
 }
 
 /* Filters */
-.filters {
+.filters-container {
     display: flex;
-    gap: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
-.filters input {
-    flex: 1;
+.filter-btn {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    min-width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.filter-btn.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
 }
 
 .hint {

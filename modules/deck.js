@@ -21,14 +21,14 @@ export class Deck {
     createDeck(settings) {
         let filtered = this.allElements;
 
-        // Filter by Period
-        if (settings.period) {
-            filtered = filtered.filter(el => el.period === parseInt(settings.period));
+        // Filter by Period (Array)
+        if (settings.periods && settings.periods.length > 0) {
+            filtered = filtered.filter(el => settings.periods.includes(el.period));
         }
 
-        // Filter by Group
-        if (settings.group) {
-            filtered = filtered.filter(el => el.group === parseInt(settings.group));
+        // Filter by Group (Array)
+        if (settings.groups && settings.groups.length > 0) {
+            filtered = filtered.filter(el => settings.groups.includes(el.group));
         }
 
         // Shuffle
@@ -40,7 +40,7 @@ export class Deck {
             filtered = filtered.slice(0, count);
         }
 
-        this.currentDeck = filtered.map(item => ({ ...item })); // Deep copy needed? Shallow is probably fine for read-only
+        this.currentDeck = filtered.map(item => ({ ...item }));
         return this.currentDeck;
     }
 
